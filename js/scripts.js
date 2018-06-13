@@ -1,29 +1,13 @@
+//Business Logic
 function Board() {
   this.coordinates = [];
 }
 
-function PlayerMoves() {
-  this.coordinates = [];
-}
-
-function ComputerMoves() {
-  this.coordinates = [];
-}
-
-function Player(name, mark) {
-  this.name = name;
-  this.mark = mark;
-}
-
-PlayerMoves.prototype.populatePlayerBoard = function(square) {
+Board.prototype.populateBoard = function(square) {
   this.coordinates.push(square);
 }
 
-ComputerMoves.prototype.populateComputerBoard = function(square) {
-  this.coordinates.push(square);
-}
-
-PlayerMoves.prototype.checkWin = function() {
+Board.prototype.checkWin = function() {
   if (this.coordinates.includes("a1") && this.coordinates.includes("a2") && this.coordinates.includes("a3")) {
     return true;
   }
@@ -53,45 +37,17 @@ PlayerMoves.prototype.checkWin = function() {
   }
 }
 
-ComputerMoves.prototype.checkWin = function() {
-  if (this.coordinates.includes("a1") && this.coordinates.includes("a2") && this.coordinates.includes("a3")) {
-    return true;
-  }
-  if (this.coordinates.includes("b1") && this.coordinates.includes("b2") && this.coordinates.includes("b3")) {
-    return true;
-  }
-  if (this.coordinates.includes("c1") && this.coordinates.includes("c2") && this.coordinates.includes("c3")) {
-    return true;
-  }
-  if (this.coordinates.includes("a1") && this.coordinates.includes("b1") && this.coordinates.includes("c1"))  {
-    return true;
-  }
-  if (this.coordinates.includes("a2") && this.coordinates.includes("b2") && this.coordinates.includes("c2"))  {
-    return true;
-  }
-  if (this.coordinates.includes("a3") && this.coordinates.includes("b3") && this.coordinates.includes("c3"))  {
-    return true;
-  }
-  if (this.coordinates.includes("a1") && this.coordinates.includes("b2") && this.coordinates.includes("c3")) {
-    return true;
-  }
-  if (this.coordinates.includes("a3") && this.coordinates.includes("b2") && this.coordinates.includes("c1")) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
-
-Board.prototype.checkSpaceAndPlay = function(mark, square) {
+Board.prototype.checkSpace = function(mark) {
   if (mark === "X" || mark === "O") {
     return "Sorry, spot's already taken."
   } else {
-    $("#" + square).text("X");
-    this.coordinates.push(square);
     return "Good move!";
   }
+}
+
+Board.prototype.play = function(square) {
+  $("#" + square).text("X");
+  this.coordinates.push(square);
 }
 
 Board.prototype.whatsAvailable = function() {
@@ -112,43 +68,44 @@ function computerPlay(openSpots) {
   return computerDecision;
 }
 
+function endGame(phrase) {
+  $(".result").show();
+  $("div").off("click")
+  $(".winner").text(phrase)
+  $(".comments").hide();
+}
 
+
+//UI Logic
 $(document).ready(function() {
 
   var game = new Board();
-  var playerMoves = new PlayerMoves();
-  var computerMoves = new ComputerMoves();
+  var playerMoves = new Board();
+  var computerMoves = new Board();
 
   $(".space").click(function() {
-    var currentMark = $(this).html();
-    var currentSquare = $(this).attr("id");
-    var phrase = game.checkSpaceAndPlay(currentMark, currentSquare);
-    $(".comments").text(phrase)
-    if (phrase === "Good move!") {
-      playerMoves.populatePlayerBoard(currentSquare);
+    var currentMark = $(this).html(); //X or O
+    var currentSquare = $(this).attr("id"); //"a3"
+    var phrase = game.checkSpace(currentMark); //"Good move" or "sorry"
+    $(".comments").text(phrase) //shows that phrase
+    if (phrase === "Good move!") { //if the entry is valid, run game
+      playerMoves.populateBoard(currentSquare);
+      game.play(currentSquare);
       var didPlayerWin = playerMoves.checkWin();
       if (didPlayerWin) {
-        $(".result").show();
-        $("div").off("click")
-        $(".winner").text("you, good job, you beat a random number generator")
+        endGame("Great job, you win!")
       }
       else {
-        var openSpots = game.whatsAvailable();
-        var decision = computerPlay(openSpots);
-        $("#" + decision).text("O");
-        game.coordinates.push(decision)
-        computerMoves.populateComputerBoard(decision);
-        var didComputerWin = computerMoves.checkWin();
+        var openSpots = game.whatsAvailable(); //get possibilities
+        var decision = computerPlay(openSpots); //grab "a3" or whatever decision
+        $("#" + decision).text("O"); //Put a O on that decision
+        game.populateBoard(decision); //adds decision to game board
+        computerMoves.populateBoard(decision); //adds decision to computer's move
+        var didComputerWin = computerMoves.checkWin(); //checks if comp wins
         if (didComputerWin) {
-          $(".result").show();
-          $("div").off("click")
-          $(".winner").text("the computer, you should be ashamed")
+          endGame("Oh crap, you lost to the computer!")
         }
-
       }
-
-      //Computer's Turn
-
     }
   })
 });
