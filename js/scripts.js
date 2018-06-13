@@ -79,33 +79,45 @@ function endGame(phrase) {
 //UI Logic
 $(document).ready(function() {
 
-  var game = new Board();
-  var playerMoves = new Board();
-  var computerMoves = new Board();
+  $("#first").click(function(){
+    $(".game").show();
+    var game = new Board();
+    var playerMoves = new Board();
+    var computerMoves = new Board();
 
-  $(".space").click(function() {
-    var currentMark = $(this).html(); //X or O
-    var currentSquare = $(this).attr("id"); //"a3"
-    var phrase = game.checkSpace(currentMark); //"Good move" or "sorry"
-    $(".comments").text(phrase) //shows that phrase
-    if (phrase === "Good move!") { //if the entry is valid, run game
-      playerMoves.populateBoard(currentSquare);
-      game.play(currentSquare);
-      var didPlayerWin = playerMoves.checkWin();
-      if (didPlayerWin) {
-        endGame("Great job, you win!")
-      }
-      else {
-        var openSpots = game.whatsAvailable(); //get possibilities
-        var decision = computerPlay(openSpots); //grab "a3" or whatever decision
-        $("#" + decision).text("O"); //Put a O on that decision
-        game.populateBoard(decision); //adds decision to game board
-        computerMoves.populateBoard(decision); //adds decision to computer's move
-        var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-        if (didComputerWin) {
-          endGame("Oh crap, you lost to the computer!")
+    $(".space").click(function() {
+      var currentMark = $(this).html(); //X or O
+      var currentSquare = $(this).attr("id"); //"a3"
+      var phrase = game.checkSpace(currentMark); //"Good move" or "sorry"
+      $(".comments").text(phrase) //shows that phrase
+      if (phrase === "Good move!") { //if the entry is valid, run game
+        playerMoves.populateBoard(currentSquare);
+        game.play(currentSquare);
+        var didPlayerWin = playerMoves.checkWin();
+        if (didPlayerWin) {
+          endGame("Great job, you win!")
+        }
+        else {
+          var openSpots = game.whatsAvailable(); //get possibilities
+          var decision = computerPlay(openSpots); //grab "a3" or whatever decision
+          $("#" + decision).text("O"); //Put a O on that decision
+          game.populateBoard(decision); //adds decision to game board
+          computerMoves.populateBoard(decision); //adds decision to computer's move
+          var didComputerWin = computerMoves.checkWin(); //checks if comp wins
+          if (didComputerWin) {
+            endGame("Oh crap, you lost to the computer!")
+          }
         }
       }
-    }
+    })
   })
+
+  $("#second").click(function(){
+    $(".game").show();
+    var game = new Board();
+    var playerMoves = new Board();
+    var computerMoves = new Board();
+  })
+
+
 });

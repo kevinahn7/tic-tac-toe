@@ -4,6 +4,11 @@ header {
 main {
   text-align: center;
 }
+
+.game {
+    display: none;
+}
+
 .board {
   height: 500px;
   width: 500px;
