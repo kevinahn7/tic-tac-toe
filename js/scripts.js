@@ -73,7 +73,10 @@ $(document).ready(function() {
     if (checked === "Good move!") {
       playerGame.populatePlayerBoard(currentSquare);
       console.log(game.coordinates)
+
       // var didSomeoneWin = checkWin();
+
+
       var openSpots = game.whatsAvailable();
       var decision = computerGo(openSpots);
       $("#" + decision).text("O");
