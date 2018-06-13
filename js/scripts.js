@@ -2,16 +2,12 @@ function Board() {
   this.coordinates = [];
 }
 
-function PlayerBoard() {
-  this.row = [];
-  this.column = [];
-  this.diagonal = [];
+function PlayerMoves() {
+  this.coordinates = [];
 }
 
-function ComputerBoard() {
-  this.row = [];
-  this.column = [];
-  this.diagonal = [];
+function ComputerMoves() {
+  this.coordinates = [];
 }
 
 function Player(name, mark) {
@@ -19,16 +15,74 @@ function Player(name, mark) {
   this.mark = mark;
 }
 
-PlayerBoard.prototype.populatePlayerBoard = function(square) {
-  this.row.push(square);
-  this.column.push(square);
-  this.diagonal.push(square);
+PlayerMoves.prototype.populatePlayerBoard = function(square) {
+  this.coordinates.push(square);
 }
-// Board.prototype.
 
-// Board.prototype.checkWin = function() {
-//
-// }
+ComputerMoves.prototype.populateComputerBoard = function(square) {
+  this.coordinates.push(square);
+}
+
+PlayerMoves.prototype.checkWin = function() {
+  if (this.coordinates.includes("a1") && this.coordinates.includes("a2") && this.coordinates.includes("a3")) {
+    return true;
+  }
+  if (this.coordinates.includes("b1") && this.coordinates.includes("b2") && this.coordinates.includes("b3")) {
+    return true;
+  }
+  if (this.coordinates.includes("c1") && this.coordinates.includes("c2") && this.coordinates.includes("c3")) {
+    return true;
+  }
+  if (this.coordinates.includes("a1") && this.coordinates.includes("b1") && this.coordinates.includes("c1"))  {
+    return true;
+  }
+  if (this.coordinates.includes("a2") && this.coordinates.includes("b2") && this.coordinates.includes("c2"))  {
+    return true;
+  }
+  if (this.coordinates.includes("a3") && this.coordinates.includes("b3") && this.coordinates.includes("c3"))  {
+    return true;
+  }
+  if (this.coordinates.includes("a1") && this.coordinates.includes("b2") && this.coordinates.includes("c3")) {
+    return true;
+  }
+  if (this.coordinates.includes("a3") && this.coordinates.includes("b2") && this.coordinates.includes("c1")) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+ComputerMoves.prototype.checkWin = function() {
+  if (this.coordinates.includes("a1") && this.coordinates.includes("a2") && this.coordinates.includes("a3")) {
+    return true;
+  }
+  if (this.coordinates.includes("b1") && this.coordinates.includes("b2") && this.coordinates.includes("b3")) {
+    return true;
+  }
+  if (this.coordinates.includes("c1") && this.coordinates.includes("c2") && this.coordinates.includes("c3")) {
+    return true;
+  }
+  if (this.coordinates.includes("a1") && this.coordinates.includes("b1") && this.coordinates.includes("c1"))  {
+    return true;
+  }
+  if (this.coordinates.includes("a2") && this.coordinates.includes("b2") && this.coordinates.includes("c2"))  {
+    return true;
+  }
+  if (this.coordinates.includes("a3") && this.coordinates.includes("b3") && this.coordinates.includes("c3"))  {
+    return true;
+  }
+  if (this.coordinates.includes("a1") && this.coordinates.includes("b2") && this.coordinates.includes("c3")) {
+    return true;
+  }
+  if (this.coordinates.includes("a3") && this.coordinates.includes("b2") && this.coordinates.includes("c1")) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
 
 Board.prototype.checkSpaceAndPlay = function(mark, square) {
   if (mark === "X" || mark === "O") {
@@ -52,10 +106,9 @@ Board.prototype.whatsAvailable = function() {
   return possibilities;
 }
 
-function computerGo(openSpots) {
+function computerPlay(openSpots) {
   var randomNumber = Math.floor(Math.random() * Math.floor(openSpots.length))
   var computerDecision = openSpots[randomNumber];
-  console.log(computerDecision);
   return computerDecision;
 }
 
@@ -63,25 +116,39 @@ function computerGo(openSpots) {
 $(document).ready(function() {
 
   var game = new Board();
-  var playerGame = new PlayerBoard();
+  var playerMoves = new PlayerMoves();
+  var computerMoves = new ComputerMoves();
 
   $(".space").click(function() {
     var currentMark = $(this).html();
     var currentSquare = $(this).attr("id");
-    var checked = game.checkSpaceAndPlay(currentMark, currentSquare);
-    $(".comments").text(checked)
-    if (checked === "Good move!") {
-      playerGame.populatePlayerBoard(currentSquare);
-      console.log(game.coordinates)
+    var phrase = game.checkSpaceAndPlay(currentMark, currentSquare);
+    $(".comments").text(phrase)
+    if (phrase === "Good move!") {
+      playerMoves.populatePlayerBoard(currentSquare);
+      var didPlayerWin = playerMoves.checkWin();
+      if (didPlayerWin) {
+        $(".result").show();
+        $("div").off("click")
+        $(".winner").text("you, good job, you beat a random number generator")
+      }
+      else {
+        var openSpots = game.whatsAvailable();
+        var decision = computerPlay(openSpots);
+        $("#" + decision).text("O");
+        game.coordinates.push(decision)
+        computerMoves.populateComputerBoard(decision);
+        var didComputerWin = computerMoves.checkWin();
+        if (didComputerWin) {
+          $(".result").show();
+          $("div").off("click")
+          $(".winner").text("the computer, you should be ashamed")
+        }
 
-      // var didSomeoneWin = checkWin();
+      }
 
+      //Computer's Turn
 
-      var openSpots = game.whatsAvailable();
-      var decision = computerGo(openSpots);
-      $("#" + decision).text("O");
-      game.coordinates.push(decision)
-      console.log(openSpots);
     }
   })
 });
