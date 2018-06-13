@@ -37,11 +37,11 @@ Board.prototype.checkWin = function() {
   }
 }
 
-Board.prototype.checkSpace = function(mark) {
+Board.prototype.isLegal = function(mark) {
   if (mark === "X" || mark === "O") {
-    return "Sorry, spot's already taken."
+    return false;
   } else {
-    return "Good move!";
+    return true;
   }
 }
 
@@ -75,11 +75,22 @@ function endGame(phrase) {
   $(".comments").hide();
 }
 
+function playerTurn() {
+
+}
+
+function computerTurn () {
+
+}
+function hideButton() {
+  $(".theButtons").hide();
+}
 
 //UI Logic
 $(document).ready(function() {
 
   $("#first").click(function(){
+    hideButton()
     $(".game").show();
     var game = new Board();
     var playerMoves = new Board();
@@ -88,9 +99,11 @@ $(document).ready(function() {
     $(".space").click(function() {
       var currentMark = $(this).html(); //X or O
       var currentSquare = $(this).attr("id"); //"a3"
-      var phrase = game.checkSpace(currentMark); //"Good move" or "sorry"
-      $(".comments").text(phrase) //shows that phrase
-      if (phrase === "Good move!") { //if the entry is valid, run game
+      var legality = game.isLegal(currentMark);
+      var phrase = "Sorry, this spot is taken";
+
+      if (legality === true) { //if the entry is valid, run game
+        $(".comments").text("")
         playerMoves.populateBoard(currentSquare);
         game.play(currentSquare);
         var didPlayerWin = playerMoves.checkWin();
@@ -109,14 +122,54 @@ $(document).ready(function() {
           }
         }
       }
+      else if (legality === false) {
+        $(".comments").text(phrase) //shows that phrase
+      }
     })
   })
 
   $("#second").click(function(){
+    hideButton();
     $(".game").show();
     var game = new Board();
     var playerMoves = new Board();
     var computerMoves = new Board();
+
+    var openSpots = game.whatsAvailable(); //get possibilities
+    var decision = computerPlay(openSpots); //grab "a3" or whatever decision
+    $("#" + decision).text("O"); //Put a O on that decision
+    game.populateBoard(decision); //adds decision to game board
+    computerMoves.populateBoard(decision); //adds decision to computer's move
+    $(".space").click(function() {
+      var currentMark = $(this).html(); //X or O
+      var currentSquare = $(this).attr("id"); //"a3"
+      var legality = game.isLegal(currentMark);
+      var phrase = "Sorry, this spot is taken";
+
+      if (legality === true) { //if the entry is valid, run game
+        $(".comments").text("")
+        playerMoves.populateBoard(currentSquare);
+        game.play(currentSquare);
+        var didPlayerWin = playerMoves.checkWin();
+        if (didPlayerWin) {
+          endGame("Great job, you win!")
+        }
+        else {
+          var openSpots = game.whatsAvailable(); //get possibilities
+          var decision = computerPlay(openSpots); //grab "a3" or whatever decision
+          $("#" + decision).text("O"); //Put a O on that decision
+          game.populateBoard(decision); //adds decision to game board
+          computerMoves.populateBoard(decision); //adds decision to computer's move
+          var didComputerWin = computerMoves.checkWin(); //checks if comp wins
+          if (didComputerWin) {
+            endGame("Oh crap, you lost to the computer!")
+          }
+        }
+      }
+      else if (legality === false) {
+        $(".comments").text(phrase) //shows that phrase
+      }
+    });
   })
 
 
