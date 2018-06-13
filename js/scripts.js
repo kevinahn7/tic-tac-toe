@@ -75,16 +75,10 @@ function endGame(phrase) {
   $(".comments").hide();
 }
 
-function playerTurn() {
-
-}
-
-function computerTurn () {
-
-}
 function hideButton() {
   $(".theButtons").hide();
 }
+
 
 //UI Logic
 $(document).ready(function() {
