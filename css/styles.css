@@ -4,7 +4,10 @@ header {
 main {
   text-align: center;
 }
-
+.theButtons button,
+.again {
+  width: 40%;
+}
 .game {
     display: none;
 }
@@ -28,4 +31,9 @@ main {
 
 .result {
   display:none;
+  margin: 30px auto;
+}
+
+header {
+  margin: 40px auto;
 }
