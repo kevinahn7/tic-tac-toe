@@ -54,3 +54,8 @@ label {
 header {
   margin: 40px auto;
 }
+
+.comments {
+  margin: 10px;
+  font-size: 2em;
+}

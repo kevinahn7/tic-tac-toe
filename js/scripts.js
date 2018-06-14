@@ -160,7 +160,7 @@ $(document).ready(function() {
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
           var didPlayerWin = playerMoves.checkWin();
-          if (didPlayerWin) { endGame("Great job, you win!") }
+          if (didPlayerWin) { endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!") }
           else if (!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
             var decision = computerPlay(openSpots); //grab "a3" or whatever decision
@@ -168,10 +168,10 @@ $(document).ready(function() {
             game.populateBoard(decision); //adds decision to game board
             computerMoves.populateBoard(decision); //adds decision to computer's move
             var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) { endGame("Oh crap, you lost to the computer!") }
+            if (didComputerWin) { endGame("You lost to a random number generator, good job!") }
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
         }
         else if (legality === false) { $(".comments").text(phrase) } //shows that phrase
       });
@@ -203,7 +203,7 @@ $(document).ready(function() {
           game.play(currentSquare);
           var didPlayerWin = playerMoves.checkWin();
           if (didPlayerWin) {
-            endGame("Great job, you win!")
+            endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
           }
           else if (!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
@@ -213,11 +213,11 @@ $(document).ready(function() {
             computerMoves.populateBoard(decision); //adds decision to computer's move
             var didComputerWin = computerMoves.checkWin(); //checks if comp wins
             if (didComputerWin) {
-              endGame("Oh crap, you lost to the computer!")
+              endGame("You lost to a random number generator, good job!")
             }
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
@@ -247,7 +247,7 @@ $(document).ready(function() {
           game.play(currentSquare); //marks the space and pushes the selected space to the game board object
           var didPlayerWin = playerMoves.checkWin(); //checks if the player has won
           if (didPlayerWin) {
-            endGame("Great job, you win!") //ends the game if the player won
+            endGame("Goob you win! Try hard mode next!") //ends the game if the player won
           }
           else if (!didPlayerWin) { //continues if the player didn't win and computer goes
             var openSpots = game.whatsAvailable(); //get possibilities
@@ -263,7 +263,7 @@ $(document).ready(function() {
             }
           } //otherwise end turn
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
@@ -299,7 +299,7 @@ $(document).ready(function() {
           game.play(currentSquare);
           var didPlayerWin = playerMoves.checkWin();
           if (didPlayerWin) {
-            endGame("Great job, you win!")
+            endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
           }
           else if(!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
@@ -314,7 +314,7 @@ $(document).ready(function() {
             }
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
@@ -343,7 +343,7 @@ $(document).ready(function() {
           game.play(currentSquare); //marks the space and pushes the selected space to the game board object
           var didPlayerWin = playerMoves.checkWin(); //checks if the player has won
           if (didPlayerWin) {
-            endGame("Great job, you win!") //ends the game if the player won
+            endGame("Great job, you win! Try the hard mode if you think are good enough!") //ends the game if the player won
           }
           else if (!didPlayerWin) { //continues if the player didn't win and computer goes
             var openSpots = game.whatsAvailable(); //get possibilities
@@ -356,11 +356,11 @@ $(document).ready(function() {
             computerMoves.populateBoard(decision); //adds decision to computer's board obj
             var didComputerWin = computerMoves.checkWin(); //checks if comp wins
             if (didComputerWin) { //ends the game if comp won
-              endGame("Oh crap, you lost to the computer!")
+              endGame("It seems like humanity is doomed!")
             }
           } //otherwise end turn
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
@@ -395,7 +395,7 @@ $(document).ready(function() {
           game.play(currentSquare);
           var didPlayerWin = playerMoves.checkWin();
           if (didPlayerWin) {
-            endGame("Great job, you win!")
+            endGame("Great job, you won! I can\'t believe my eyes!")
           }
           else if(!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
@@ -407,11 +407,11 @@ $(document).ready(function() {
             computerMoves.populateBoard(decision); //adds decision to computer's move
             var didComputerWin = computerMoves.checkWin(); //checks if comp wins
             if (didComputerWin) {
-              endGame("Oh crap, you lost to the computer!")
+              endGame("It seems like humanity is doomed!")
             }
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
