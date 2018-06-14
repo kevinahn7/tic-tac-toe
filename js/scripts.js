@@ -79,7 +79,7 @@ function hideButton() {
   $("#orderAndDifficulty").hide();
 }
 
-function computerFirstMoveHard (openSpots) {
+function computerFirstMoveHard(openSpots) {
   if (openSpots.includes("b2")) {
     return "b2";
   }
@@ -92,6 +92,25 @@ function computerFirstMoveHard (openSpots) {
   else {
     return computerPlay(openSpots);
   }
+}
+
+function blockASquare(one, two, three, decision) {
+  if ($("#" + one).html() === "X" && $("#" + two).html() === "X" && $("#" + three).html() === "") { return three; }
+  if ($("#" + two).html() === "X" && $("#" + three).html() === "X" && $("#" + one).html() === "") { return one; }
+  if ($("#" + one).html() === "X" && $("#" + three).html() === "X" && $("#" + two).html() === "") { return two; }
+  else {return decision}
+}
+
+function computerDefense(decision) {
+  decision = blockASquare("a1", "a2", "a3", decision);
+  decision = blockASquare("b1", "b2", "b3", decision);
+  decision = blockASquare("c1", "c2", "c3", decision);
+  decision = blockASquare("a1", "b1", "c1", decision);
+  decision = blockASquare("a2", "b2", "c2", decision);
+  decision = blockASquare("a3", "b3", "c3", decision);
+  decision = blockASquare("a1", "b2", "c3", decision);
+  decision = blockASquare("a3", "b2", "c1", decision);
+  return decision;
 }
 
 
@@ -211,9 +230,11 @@ $(document).ready(function() {
           if (didPlayerWin) {
             endGame("Great job, you win!") //ends the game if the player won
           }
-          else { //continues if the player didn't win and computer goes
+          else if (!didPlayerWin) { //continues if the player didn't win and computer goes
             var openSpots = game.whatsAvailable(); //get possibilities
             var decision = computerFirstMoveHard(openSpots); //grabs a random space from the possibilities array eg "a3"
+            decision = computerDefense(decision);
+            console.log(decision);
             // setTimeout(function() { $("#" + decision).text("O"); }, 1000);
             $("#" + decision).text("O"); //Put a O on that decision
             game.populateBoard(decision); //adds decision to game board
@@ -223,6 +244,8 @@ $(document).ready(function() {
               endGame("Oh crap, you lost to the computer!")
             }
           } //otherwise end turn
+          var openSpots = game.whatsAvailable();
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
@@ -260,9 +283,10 @@ $(document).ready(function() {
           if (didPlayerWin) {
             endGame("Great job, you win!")
           }
-          else {
+          else if(!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
             var decision = computerPlay(openSpots); //grab "a3" or whatever decision
+            decision = computerDefense(decision);
             $("#" + decision).text("O"); //Put a O on that decision
             game.populateBoard(decision); //adds decision to game board
             computerMoves.populateBoard(decision); //adds decision to computer's move
@@ -271,6 +295,8 @@ $(document).ready(function() {
               endGame("Oh crap, you lost to the computer!")
             }
           }
+          var openSpots = game.whatsAvailable();
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
