@@ -4,10 +4,15 @@ header {
 main {
   text-align: center;
 }
-.theButtons button,
+
 .again {
   width: 40%;
 }
+
+.start {
+  margin-top: 20px;
+}
+
 .game {
     display: none;
 }
@@ -19,14 +24,16 @@ main {
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   margin: 0 auto;
+  grid-gap: 5px;
+  background-color: black;
 }
 
 .space {
-  border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 100px;
+  background-color: white;
 }
 
 .result {

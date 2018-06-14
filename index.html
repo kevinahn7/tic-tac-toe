@@ -8,6 +8,8 @@
   crossorigin="anonymous">
   <link href="css/styles.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src="js/scripts.js"></script>
 </head>
 <body>
@@ -16,10 +18,35 @@
       <h1>Extreme Tic-Tac-Toe</h1>
     </header>
     <main>
-      <div class="theButtons">
-        <button id="first"class="btn btn-primary btn-lg">Go First</button>
-        <button id="second" class="btn btn-info btn-lg">Go Second</button>
-      </div>
+      <form id="orderAndDifficulty">
+        <div class="orderButtons">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <!-- <button id="first"class="btn btn-primary btn-lg">Go First</button>
+            <button id="second" class="btn btn-primary btn-lg">Go Second</button> -->
+            <label class="btn btn-dark btn-lg">
+            <input type="radio" name="order" class="theOrder" autocomplete="off" value="first">Go First
+            </label>
+            <label class="btn btn-dark btn-lg">
+            <input type="radio" name="order" class="theOrder" autocomplete="off" value="second">Go Second
+            </label>
+          </div>
+        </div>
+        <div class="difficultyButtons">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <!-- <button id="first"class="btn btn-primary btn-lg">Go First</button>
+            <button id="second" class="btn btn-primary btn-lg">Go Second</button> -->
+            <label class="btn btn-info btn-lg">
+            <input type="radio" name="difficulty" class="theDifficulty" autocomplete="off" value="easy">Easy
+            </label>
+            <label class="btn btn-info btn-lg">
+            <input type="radio" name="difficulty" class="theDifficulty" autocomplete="off" value="normal">Normal
+            </label>
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-success btn-lg start" type="submit">Start this amazing, well made game</button>
+        </div>
+      </form>
       <div class="game">
         <div class="board">
           <div class="space" id="a1"></div>
