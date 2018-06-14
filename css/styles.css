@@ -13,8 +13,18 @@ main {
   margin-top: 20px;
 }
 
+.orderButtons {
+  margin-bottom: 10px;
+}
+
+
 .game {
     display: none;
+}
+
+label {
+  width: 200px;
+  margin: 5px;
 }
 
 .board {

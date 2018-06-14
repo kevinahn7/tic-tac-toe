@@ -99,6 +99,7 @@ function computerFirstMoveHard (openSpots) {
 $(document).ready(function() {
 
   $("#orderAndDifficulty").submit(function(event){
+
     event.preventDefault();
     var order = $(".theOrder:checked").val();
     var difficulty = $(".theDifficulty:checked").val();
@@ -116,32 +117,28 @@ $(document).ready(function() {
         var currentSquare = $(this).attr("id"); //"a3"
         var legality = game.isLegal(currentMark);
         var phrase = "Sorry, this spot is taken";
-
         if (legality === true) { //if the entry is valid, run game
           $(".comments").text("")
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
           var didPlayerWin = playerMoves.checkWin();
-          if (didPlayerWin) {
-            endGame("Great job, you win!")
-          }
-          else {
+          if (didPlayerWin) { endGame("Great job, you win!") }
+          else if (!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
             var decision = computerPlay(openSpots); //grab "a3" or whatever decision
             $("#" + decision).text("O"); //Put a O on that decision
             game.populateBoard(decision); //adds decision to game board
             computerMoves.populateBoard(decision); //adds decision to computer's move
             var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) {
-              endGame("Oh crap, you lost to the computer!")
-            }
+            if (didComputerWin) { endGame("Oh crap, you lost to the computer!") }
           }
+          var openSpots = game.whatsAvailable();
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
         }
-        else if (legality === false) {
-          $(".comments").text(phrase) //shows that phrase
-        }
-      })
+        else if (legality === false) { $(".comments").text(phrase) } //shows that phrase
+      });
     }
+
     else if (order === "second" && difficulty === "easy") {
       //Player goes second on easy mode
       hideButton();
@@ -170,7 +167,7 @@ $(document).ready(function() {
           if (didPlayerWin) {
             endGame("Great job, you win!")
           }
-          else {
+          else if (!didPlayerWin) {
             var openSpots = game.whatsAvailable(); //get possibilities
             var decision = computerPlay(openSpots); //grab "a3" or whatever decision
             $("#" + decision).text("O"); //Put a O on that decision
@@ -181,12 +178,17 @@ $(document).ready(function() {
               endGame("Oh crap, you lost to the computer!")
             }
           }
+          var openSpots = game.whatsAvailable();
+          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game MEEEOOOWWW!!!") }
         }
         else if (legality === false) {
           $(".comments").text(phrase) //shows that phrase
         }
       });
     }
+
+
+
     else if (order === "first" && difficulty === "normal") {
       //Player goes first on normal mode
       hideButton()
@@ -227,6 +229,9 @@ $(document).ready(function() {
         }
       })
     }
+
+
+
     else if (order === "second" && difficulty === "normal") {
       //Player goes second on normal mode
       hideButton();
@@ -272,9 +277,15 @@ $(document).ready(function() {
         }
       });
     }
+
+
+
     else {
       alert("Please select an order and difficulty before beginning the game.")
     }
+
+
+
   });
-  
+
 });
