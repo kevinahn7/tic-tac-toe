@@ -86,14 +86,16 @@ function computerMove(decision, XOrO) {
 //UI Logic
 $(document).ready(function() {
   $("#orderAndDifficulty").submit(function(event){
-    hideButton();
-    $(".game").show();
+    var order = $(".theOrder:checked").val();
+    var difficulty = $(".theDifficulty:checked").val();
+    if (order && difficulty) {
+      hideButton();
+      $(".game").show();
+    }
     var game = new Board();
     var playerMoves = new Board();
     var computerMoves = new Board();
     event.preventDefault();
-    var order = $(".theOrder:checked").val();
-    var difficulty = $(".theDifficulty:checked").val();
     var phrase = "Sorry, this spot is taken";
     if (order === "first" && difficulty === "easy") {
       $(".space").click(function() {
