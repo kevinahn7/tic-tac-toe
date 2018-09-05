@@ -8,41 +8,20 @@ Board.prototype.populateBoard = function(square) {
 }
 
 Board.prototype.checkWin = function() {
-  if (this.coordinates.includes("a1") && this.coordinates.includes("a2") && this.coordinates.includes("a3")) {
-    return true;
-  }
-  if (this.coordinates.includes("b1") && this.coordinates.includes("b2") && this.coordinates.includes("b3")) {
-    return true;
-  }
-  if (this.coordinates.includes("c1") && this.coordinates.includes("c2") && this.coordinates.includes("c3")) {
-    return true;
-  }
-  if (this.coordinates.includes("a1") && this.coordinates.includes("b1") && this.coordinates.includes("c1"))  {
-    return true;
-  }
-  if (this.coordinates.includes("a2") && this.coordinates.includes("b2") && this.coordinates.includes("c2"))  {
-    return true;
-  }
-  if (this.coordinates.includes("a3") && this.coordinates.includes("b3") && this.coordinates.includes("c3"))  {
-    return true;
-  }
-  if (this.coordinates.includes("a1") && this.coordinates.includes("b2") && this.coordinates.includes("c3")) {
-    return true;
-  }
-  if (this.coordinates.includes("a3") && this.coordinates.includes("b2") && this.coordinates.includes("c1")) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  if (this.coordinates.includes("a1") && this.coordinates.includes("a2") && this.coordinates.includes("a3")) return true;
+  if (this.coordinates.includes("b1") && this.coordinates.includes("b2") && this.coordinates.includes("b3")) return true;
+  if (this.coordinates.includes("c1") && this.coordinates.includes("c2") && this.coordinates.includes("c3")) return true;
+  if (this.coordinates.includes("a1") && this.coordinates.includes("b1") && this.coordinates.includes("c1")) return true;
+  if (this.coordinates.includes("a2") && this.coordinates.includes("b2") && this.coordinates.includes("c2")) return true;
+  if (this.coordinates.includes("a3") && this.coordinates.includes("b3") && this.coordinates.includes("c3")) return true;
+  if (this.coordinates.includes("a1") && this.coordinates.includes("b2") && this.coordinates.includes("c3")) return true;
+  if (this.coordinates.includes("a3") && this.coordinates.includes("b2") && this.coordinates.includes("c1")) return true;
+  else return false;
 }
 
 Board.prototype.isLegal = function(mark) {
-  if (mark === "X" || mark === "O") {
-    return false;
-  } else {
-    return true;
-  }
+  if (mark === "X" || mark === "O") return false;
+  else return true;
 }
 
 Board.prototype.play = function(square) {
@@ -54,9 +33,7 @@ Board.prototype.whatsAvailable = function() {
   var possibilities = ["a1", "a2", "a3", "b1", "b2", "b3", "c1", "c2", "c3"];
   this.coordinates.forEach(function(coordinate) {
     for (x=0; x<possibilities.length; x++) {
-      if (coordinate === possibilities[x]) {
-        possibilities.splice(x, 1);
-      }
+      if (coordinate === possibilities[x]) possibilities.splice(x, 1);
     }
   });
   return possibilities;
@@ -64,8 +41,7 @@ Board.prototype.whatsAvailable = function() {
 
 function computerPlay(openSpots) {
   var randomNumber = Math.floor(Math.random() * Math.floor(openSpots.length))
-  var computerDecision = openSpots[randomNumber];
-  return computerDecision;
+  return openSpots[randomNumber];
 }
 
 function endGame(phrase) {
@@ -80,352 +56,221 @@ function hideButton() {
 }
 
 function computerFirstMoveHard(openSpots) {
-  if (openSpots.includes("b2")) {
-    return "b2";
-  }
-  else if (openSpots.length === 8){
+  if (openSpots.includes("b2")) return "b2";
+  else if (openSpots.length === 8) {
     var corners = ["a1", "a3", "c1", "c3"];
     var randomNumber = Math.floor(Math.random() * Math.floor(4))
-    var cornerPick = corners[randomNumber];
-    return cornerPick;
-  }
-  else {
-    return computerPlay(openSpots);
-  }
+    return corners[randomNumber];
+  } else return computerPlay(openSpots);
 }
 
-function blockASquare(one, two, three, decision) {
-  if ($("#" + one).html() === "X" && $("#" + two).html() === "X" && $("#" + three).html() === "") { return three; }
-  if ($("#" + two).html() === "X" && $("#" + three).html() === "X" && $("#" + one).html() === "") { return one; }
-  if ($("#" + one).html() === "X" && $("#" + three).html() === "X" && $("#" + two).html() === "") { return two; }
-  else {return decision}
+function squareMove(one, two, three, decision, attackOrBlock) {
+  if ($("#" + one).html() === attackOrBlock && $("#" + two).html() === attackOrBlock && $("#" + three).html() === "") return three;
+  if ($("#" + two).html() === attackOrBlock && $("#" + three).html() === attackOrBlock && $("#" + one).html() === "") return one;
+  if ($("#" + one).html() === attackOrBlock && $("#" + three).html() === attackOrBlock && $("#" + two).html() === "") return two;
+  else return decision
 }
 
-function attackSquare(one, two, three, decision) {
-  if ($("#" + one).html() === "O" && $("#" + two).html() === "O" && $("#" + three).html() === "") { return three; }
-  if ($("#" + two).html() === "O" && $("#" + three).html() === "O" && $("#" + one).html() === "") { return one; }
-  if ($("#" + one).html() === "O" && $("#" + three).html() === "O" && $("#" + two).html() === "") { return two; }
-  else {return decision}
-}
-
-function computerDefense(decision) {
-  decision = blockASquare("a1", "a2", "a3", decision);
-  decision = blockASquare("b1", "b2", "b3", decision);
-  decision = blockASquare("c1", "c2", "c3", decision);
-  decision = blockASquare("a1", "b1", "c1", decision);
-  decision = blockASquare("a2", "b2", "c2", decision);
-  decision = blockASquare("a3", "b3", "c3", decision);
-  decision = blockASquare("a1", "b2", "c3", decision);
-  decision = blockASquare("a3", "b2", "c1", decision);
+function computerMove(decision, XOrO) {
+  decision = squareMove("a1", "a2", "a3", decision, XOrO);
+  decision = squareMove("b1", "b2", "b3", decision, XOrO);
+  decision = squareMove("c1", "c2", "c3", decision, XOrO);
+  decision = squareMove("a1", "b1", "c1", decision, XOrO);
+  decision = squareMove("a2", "b2", "c2", decision, XOrO);
+  decision = squareMove("a3", "b3", "c3", decision, XOrO);
+  decision = squareMove("a1", "b2", "c3", decision, XOrO);
+  decision = squareMove("a3", "b2", "c1", decision, XOrO);
   return decision;
 }
-
-function computerAttack(decision) {
-  decision = attackSquare("a1", "a2", "a3", decision);
-  decision = attackSquare("b1", "b2", "b3", decision);
-  decision = attackSquare("c1", "c2", "c3", decision);
-  decision = attackSquare("a1", "b1", "c1", decision);
-  decision = attackSquare("a2", "b2", "c2", decision);
-  decision = attackSquare("a3", "b3", "c3", decision);
-  decision = attackSquare("a1", "b2", "c3", decision);
-  decision = attackSquare("a3", "b2", "c1", decision);
-  return decision;
-}
-
 
 //UI Logic
 $(document).ready(function() {
-
   $("#orderAndDifficulty").submit(function(event){
-
+    hideButton();
+    $(".game").show();
+    var game = new Board();
+    var playerMoves = new Board();
+    var computerMoves = new Board();
     event.preventDefault();
     var order = $(".theOrder:checked").val();
     var difficulty = $(".theDifficulty:checked").val();
-
+    var phrase = "Sorry, this spot is taken";
     if (order === "first" && difficulty === "easy") {
-      //Player goes first on easy mode
-      hideButton();
-      $(".game").show();
-      var game = new Board();
-      var playerMoves = new Board();
-      var computerMoves = new Board();
-
       $(".space").click(function() {
-        var currentMark = $(this).html(); //X or O
-        var currentSquare = $(this).attr("id"); //"a3"
+        var currentMark = $(this).html();
+        var currentSquare = $(this).attr("id");
         var legality = game.isLegal(currentMark);
-        var phrase = "Sorry, this spot is taken";
-        if (legality === true) { //if the entry is valid, run game
+        if (legality === true) {
           $(".comments").text("")
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
-          var didPlayerWin = playerMoves.checkWin();
-          if (didPlayerWin) { endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!") }
-          else if (!didPlayerWin) {
-            var openSpots = game.whatsAvailable(); //get possibilities
-            var decision = computerPlay(openSpots); //grab "a3" or whatever decision
-            $("#" + decision).text("O"); //Put a O on that decision
-            game.populateBoard(decision); //adds decision to game board
-            computerMoves.populateBoard(decision); //adds decision to computer's move
-            var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) { endGame("You lost to a random number generator, good job!") }
+          if (playerMoves.checkWin()) endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
+          else {
+            var openSpots = game.whatsAvailable();
+            var decision = computerPlay(openSpots);
+            $("#" + decision).text("O");
+            game.populateBoard(decision);
+            computerMoves.populateBoard(decision);
+            if (computerMoves.checkWin()) endGame("You lost to a random number generator, good job!")
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
+          if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) { $(".comments").text(phrase) } //shows that phrase
+        else if (legality === false) { $(".comments").text(phrase) }
       });
     }
-
     else if (order === "second" && difficulty === "easy") {
-      //Player goes second on easy mode
-      hideButton();
-      $(".game").show();
-      var game = new Board();
-      var playerMoves = new Board();
-      var computerMoves = new Board();
-
-      var openSpots = game.whatsAvailable(); //get possibilities
-      var decision = computerPlay(openSpots); //grab "a3" or whatever decision
-      $("#" + decision).text("O"); //Put a O on that decision
-      game.populateBoard(decision); //adds decision to game board
-      computerMoves.populateBoard(decision); //adds decision to computer's move
-
+      var openSpots = game.whatsAvailable();
+      var decision = computerPlay(openSpots);
+      $("#" + decision).text("O");
+      game.populateBoard(decision);
+      computerMoves.populateBoard(decision);
       $(".space").click(function() {
-        var currentMark = $(this).html(); //X or O
-        var currentSquare = $(this).attr("id"); //"a3"
+        var currentMark = $(this).html();
+        var currentSquare = $(this).attr("id");
         var legality = game.isLegal(currentMark);
-        var phrase = "Sorry, this spot is taken";
-
-        if (legality === true) { //if the entry is valid, run game
+        if (legality === true) {
           $(".comments").text("")
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
-          var didPlayerWin = playerMoves.checkWin();
-          if (didPlayerWin) {
-            endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
-          }
+          if (playerMoves.checkWin()) endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
           else if (!didPlayerWin) {
-            var openSpots = game.whatsAvailable(); //get possibilities
-            var decision = computerPlay(openSpots); //grab "a3" or whatever decision
-            $("#" + decision).text("O"); //Put a O on that decision
-            game.populateBoard(decision); //adds decision to game board
-            computerMoves.populateBoard(decision); //adds decision to computer's move
-            var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) {
-              endGame("You lost to a random number generator, good job!")
-            }
+            var openSpots = game.whatsAvailable();
+            var decision = computerPlay(openSpots);
+            $("#" + decision).text("O");
+            game.populateBoard(decision);
+            computerMoves.populateBoard(decision);
+            if (computerMoves.checkWin()) endGame("You lost to a random number generator, good job!")
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
+          if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
         else if (legality === false) {
-          $(".comments").text(phrase) //shows that phrase
+          $(".comments").text(phrase)
         }
       });
     }
-
-
-
     else if (order === "first" && difficulty === "normal") {
-      //Player goes first on normal mode
-      hideButton()
-      $(".game").show();
-      var game = new Board();
-      var playerMoves = new Board();
-      var computerMoves = new Board();
-
       $(".space").click(function() {
-        var currentMark = $(this).html(); //creates a variable that determines the current mark
-        var currentSquare = $(this).attr("id"); // grabs the id of the space clicked eg: "a3"
-        var legality = game.isLegal(currentMark); //checks if there is a mark on the current space
-        var phrase = "Sorry, this spot is taken"; //phrase for if there is already a mark
-
-        if (legality === true) { //if the entry is valid, run game
-          $(".comments").text("") //clears phrase
-          playerMoves.populateBoard(currentSquare); //adds the current clicked space to the player's moves obj
-          game.play(currentSquare); //marks the space and pushes the selected space to the game board object
-          var didPlayerWin = playerMoves.checkWin(); //checks if the player has won
-          if (didPlayerWin) {
-            endGame("Goob you win! Try hard mode next!") //ends the game if the player won
+        var currentMark = $(this).html();
+        var currentSquare = $(this).attr("id");
+        var legality = game.isLegal(currentMark);
+        if (legality === true) {
+          $(".comments").text("")
+          playerMoves.populateBoard(currentSquare);
+          game.play(currentSquare);
+          if (playerMoves.checkWin()) endGame("Good job! Try hard mode next!")
+          else {
+            var openSpots = game.whatsAvailable();
+            var decision = computerFirstMoveHard(openSpots);
+            decision = computerMove(decision, "X");
+            $("#" + decision).text("O");
+            game.populateBoard(decision);
+            computerMoves.populateBoard(decision);
+            if (computerMoves.checkWin()) endGame("Oh crap, you lost to the computer!")
           }
-          else if (!didPlayerWin) { //continues if the player didn't win and computer goes
-            var openSpots = game.whatsAvailable(); //get possibilities
-            var decision = computerFirstMoveHard(openSpots); //grabs a random space from the possibilities array eg "a3"
-            decision = computerDefense(decision);
-            // setTimeout(function() { $("#" + decision).text("O"); }, 1000);
-            $("#" + decision).text("O"); //Put a O on that decision
-            game.populateBoard(decision); //adds decision to game board
-            computerMoves.populateBoard(decision); //adds decision to computer's board obj
-            var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) { //ends the game if comp won
-              endGame("Oh crap, you lost to the computer!")
-            }
-          } //otherwise end turn
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
+          if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
         else if (legality === false) {
-          $(".comments").text(phrase) //shows that phrase
+          $(".comments").text(phrase)
         }
       })
     }
-
-
-
     else if (order === "second" && difficulty === "normal") {
-      //Player goes second on normal mode
-      hideButton();
-      $(".game").show();
-      var game = new Board();
-      var playerMoves = new Board();
-      var computerMoves = new Board();
-
-      var openSpots = game.whatsAvailable(); //get possibilities
-      var decision = "b2"; //grab "a3" or whatever decision
-      $("#" + decision).text("O"); //Put a O on that decision
-      game.populateBoard(decision); //adds decision to game board
-      computerMoves.populateBoard(decision); //adds decision to computer's move
-
+      var openSpots = game.whatsAvailable();
+      var decision = "b2";
+      $("#" + decision).text("O");
+      game.populateBoard(decision);
+      computerMoves.populateBoard(decision);
       $(".space").click(function() {
-        var currentMark = $(this).html(); //X or O
-        var currentSquare = $(this).attr("id"); //"a3"
+        var currentMark = $(this).html();
+        var currentSquare = $(this).attr("id");
         var legality = game.isLegal(currentMark);
-        var phrase = "Sorry, this spot is taken";
-
-        if (legality === true) { //if the entry is valid, run game
+        if (legality === true) {
           $(".comments").text("")
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
-          var didPlayerWin = playerMoves.checkWin();
-          if (didPlayerWin) {
-            endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
-          }
-          else if(!didPlayerWin) {
-            var openSpots = game.whatsAvailable(); //get possibilities
-            var decision = computerPlay(openSpots); //grab "a3" or whatever decision
-            decision = computerDefense(decision);
-            $("#" + decision).text("O"); //Put a O on that decision
-            game.populateBoard(decision); //adds decision to game board
-            computerMoves.populateBoard(decision); //adds decision to computer's move
-            var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) {
-              endGame("Oh crap, you lost to the computer!")
-            }
+          if (playerMoves.checkWin()) endGame("Good job! Try hard mode next!")
+          else {
+            var openSpots = game.whatsAvailable();
+            var decision = computerPlay(openSpots);
+            decision = computerMove(decision, "X");
+            $("#" + decision).text("O");
+            game.populateBoard(decision);
+            computerMoves.populateBoard(decision);
+            if (computerMoves.checkWin()) endGame("Oh crap, you lost to the computer!")
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
+          if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
         else if (legality === false) {
-          $(".comments").text(phrase) //shows that phrase
+          $(".comments").text(phrase)
         }
       });
     }
-
-
     else if (order === "first" && difficulty === "hard") {
-      //Player goes first on hard mode
-      hideButton()
-      $(".game").show();
-      var game = new Board();
-      var playerMoves = new Board();
-      var computerMoves = new Board();
-
       $(".space").click(function() {
-        var currentMark = $(this).html(); //creates a variable that determines the current mark
-        var currentSquare = $(this).attr("id"); // grabs the id of the space clicked eg: "a3"
-        var legality = game.isLegal(currentMark); //checks if there is a mark on the current space
-        var phrase = "Sorry, this spot is taken"; //phrase for if there is already a mark
-
-        if (legality === true) { //if the entry is valid, run game
-          $(".comments").text("") //clears phrase
-          playerMoves.populateBoard(currentSquare); //adds the current clicked space to the player's moves obj
-          game.play(currentSquare); //marks the space and pushes the selected space to the game board object
-          var didPlayerWin = playerMoves.checkWin(); //checks if the player has won
-          if (didPlayerWin) {
-            endGame("Great job, you win! Try the hard mode if you think are good enough!") //ends the game if the player won
+        var currentMark = $(this).html();
+        var currentSquare = $(this).attr("id");
+        var legality = game.isLegal(currentMark);
+        if (legality === true) {
+          $(".comments").text("")
+          playerMoves.populateBoard(currentSquare);
+          game.play(currentSquare);
+          if (playerMoves.checkWin()) endGame("Great job, you win! Try going second with the hard mode if you're brave enough!")
+          else {
+            var openSpots = game.whatsAvailable();
+            var decision = computerFirstMoveHard(openSpots);
+            decision = computerMove(decision, "X");
+            decision = computerMove(decision, "O");
+            $("#" + decision).text("O");
+            game.populateBoard(decision);
+            computerMoves.populateBoard(decision);
+            if (computerMoves.checkWin()) endGame("It seems like humanity is doomed!")
           }
-          else if (!didPlayerWin) { //continues if the player didn't win and computer goes
-            var openSpots = game.whatsAvailable(); //get possibilities
-            var decision = computerFirstMoveHard(openSpots); //grabs a random space from the possibilities array eg "a3"
-            decision = computerDefense(decision);
-            decision = computerAttack(decision);
-            // setTimeout(function() { $("#" + decision).text("O"); }, 1000);
-            $("#" + decision).text("O"); //Put a O on that decision
-            game.populateBoard(decision); //adds decision to game board
-            computerMoves.populateBoard(decision); //adds decision to computer's board obj
-            var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) { //ends the game if comp won
-              endGame("It seems like humanity is doomed!")
-            }
-          } //otherwise end turn
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
+          if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
         else if (legality === false) {
-          $(".comments").text(phrase) //shows that phrase
+          $(".comments").text(phrase)
         }
       })
     }
-
-
     else if (order === "second" && difficulty === "hard") {
-      //Player goes second on normal mode
-      hideButton();
-      $(".game").show();
-      var game = new Board();
-      var playerMoves = new Board();
-      var computerMoves = new Board();
-
-      var openSpots = game.whatsAvailable(); //get possibilities
-      var decision = "b2"; //grab "a3" or whatever decision
-      $("#" + decision).text("O"); //Put a O on that decision
-      game.populateBoard(decision); //adds decision to game board
-      computerMoves.populateBoard(decision); //adds decision to computer's move
-
+      var openSpots = game.whatsAvailable();
+      var decision = "b2";
+      $("#" + decision).text("O");
+      game.populateBoard(decision);
+      computerMoves.populateBoard(decision);
       $(".space").click(function() {
-        var currentMark = $(this).html(); //X or O
-        var currentSquare = $(this).attr("id"); //"a3"
+        var currentMark = $(this).html();
+        var currentSquare = $(this).attr("id");
         var legality = game.isLegal(currentMark);
-        var phrase = "Sorry, this spot is taken";
-
-        if (legality === true) { //if the entry is valid, run game
+        if (legality === true) {
           $(".comments").text("")
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
-          var didPlayerWin = playerMoves.checkWin();
-          if (didPlayerWin) {
-            endGame("Great job, you won! I can\'t believe my eyes!")
-          }
-          else if(!didPlayerWin) {
-            var openSpots = game.whatsAvailable(); //get possibilities
-            var decision = computerPlay(openSpots); //grab "a3" or whatever decision
-            decision = computerDefense(decision);
-            decision = computerAttack(decision);
-            $("#" + decision).text("O"); //Put a O on that decision
-            game.populateBoard(decision); //adds decision to game board
-            computerMoves.populateBoard(decision); //adds decision to computer's move
-            var didComputerWin = computerMoves.checkWin(); //checks if comp wins
-            if (didComputerWin) {
-              endGame("It seems like humanity is doomed!")
-            }
+          if (playerMoves.checkWin()) endGame("Great job, you won! I can\'t believe my eyes!")
+          else {
+            var openSpots = game.whatsAvailable();
+            var decision = computerPlay(openSpots);
+            decision = computerMove(decision, "X");
+            decision = computerMove(decision, "O");
+            $("#" + decision).text("O");
+            game.populateBoard(decision);
+            computerMoves.populateBoard(decision);
+            var didComputerWin = computerMoves.checkWin();
+            if (didComputerWin) endGame("It seems like humanity is doomed!")
           }
           var openSpots = game.whatsAvailable();
-          if (openSpots.length === 0 && !didPlayerWin && !didComputerWin) { endGame("Cat's Game! Why is it even called that??") }
+          if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
         else if (legality === false) {
-          $(".comments").text(phrase) //shows that phrase
+          $(".comments").text(phrase)
         }
       });
     }
-
-
-    else {
-      alert("Please select an order and difficulty before beginning the game.")
-    }
-
-
-
+    else alert("Please select an order and difficulty before beginning the game.")
   });
-
 });
