@@ -82,7 +82,6 @@ function computerMove(decision, XOrO) {
   decision = squareMove("a3", "b2", "c1", decision, XOrO);
   return decision;
 }
-
 //UI Logic
 $(document).ready(function() {
   $("#orderAndDifficulty").submit(function(event){
@@ -118,7 +117,7 @@ $(document).ready(function() {
           var openSpots = game.whatsAvailable();
           if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) { $(".comments").text(phrase) }
+        else $(".comments").text(phrase)
       });
     }
     else if (order === "second" && difficulty === "easy") {
@@ -136,7 +135,7 @@ $(document).ready(function() {
           playerMoves.populateBoard(currentSquare);
           game.play(currentSquare);
           if (playerMoves.checkWin()) endGame("This was just a random number generator, so don\'t feel good about yourself. Try normal mode next!")
-          else if (!didPlayerWin) {
+          else {
             var openSpots = game.whatsAvailable();
             var decision = computerPlay(openSpots);
             $("#" + decision).text("O");
@@ -147,9 +146,7 @@ $(document).ready(function() {
           var openSpots = game.whatsAvailable();
           if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) {
-          $(".comments").text(phrase)
-        }
+        else $(".comments").text(phrase)
       });
     }
     else if (order === "first" && difficulty === "normal") {
@@ -174,9 +171,7 @@ $(document).ready(function() {
           var openSpots = game.whatsAvailable();
           if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) {
-          $(".comments").text(phrase)
-        }
+        else $(".comments").text(phrase)
       })
     }
     else if (order === "second" && difficulty === "normal") {
@@ -206,9 +201,7 @@ $(document).ready(function() {
           var openSpots = game.whatsAvailable();
           if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) {
-          $(".comments").text(phrase)
-        }
+        else $(".comments").text(phrase)
       });
     }
     else if (order === "first" && difficulty === "hard") {
@@ -234,9 +227,7 @@ $(document).ready(function() {
           var openSpots = game.whatsAvailable();
           if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) {
-          $(".comments").text(phrase)
-        }
+        else $(".comments").text(phrase)
       })
     }
     else if (order === "second" && difficulty === "hard") {
@@ -262,15 +253,12 @@ $(document).ready(function() {
             $("#" + decision).text("O");
             game.populateBoard(decision);
             computerMoves.populateBoard(decision);
-            var didComputerWin = computerMoves.checkWin();
-            if (didComputerWin) endGame("It seems like humanity is doomed!")
+            if (computerMoves.checkWin()) endGame("It seems like humanity is doomed!")
           }
           var openSpots = game.whatsAvailable();
           if (openSpots.length === 0) endGame("Cat's Game! Why is it even called that??")
         }
-        else if (legality === false) {
-          $(".comments").text(phrase)
-        }
+        else $(".comments").text(phrase)
       });
     }
     else alert("Please select an order and difficulty before beginning the game.")
